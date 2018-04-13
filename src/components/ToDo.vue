@@ -2,12 +2,12 @@
 	<div class="todo">
 		<h1>TODOList</h1>
 		<ul class="list">
-			<li v-for="(todo, index) in todos">{{todo}}
-				<button type="button" @click.prevent="removeItem(index)">&times;</button>
+			<li v-for="(todo, index) in todos" :key="index">
+				{{index+1}}. {{todo}} <button type="button" @click.prevent="removeItem(index)">&times;</button>
 			</li>
 		</ul>
 		<form @submit.prevent="addNewItem">
-			<input type="text" v-model="newItem">
+			<input ref="text" type="text" v-model="newItem" autofocus>
 			<input type="submit" value="Add">
 		</form>
 	</div>
@@ -22,7 +22,7 @@
 			return {
 				todos: [],
 				newItem: ""
-			}
+			};
 		},
 		methods: {
 			addNewItem: function () {
@@ -39,14 +39,19 @@
 			},
 			removeItem: function (id) {
 				return ToDo.destroy(id).then(() => {
-					this.todos.splice(id, 1);
+					return this.loadAll();
 				});
 			},
 			loadAll: function () {
 				return ToDo.getAll().then(todos => {
-					this.todos = todos.map(x => window.web3.toAscii(x));
+					this.todos = todos.map(x => window.web3.toUtf8(x));
 				});
 			}
+		},
+		updated: function () {
+			this.$nextTick(function () {
+				this.$refs.text.focus();
+			});
 		},
 		created: function () {
 

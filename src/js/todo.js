@@ -21,7 +21,7 @@ const ToDo = {
 	},
 
 	getAll: function () {
-		return this.instance.getAll.call({
+		return this.instance.getAll({
 				from: window.web3.eth.defaultAccount,
 				gas: Math.floor(Math.random() * 50000) + 30000
 			})
@@ -31,7 +31,7 @@ const ToDo = {
 	},
 
 	create: function (item) {
-		return this.instance.create.call(window.web3.toHex(item), {
+		return this.instance.create(window.web3.toHex(item), {
 				from: window.web3.eth.defaultAccount,
 				gasPrice: window.web3.toWei(this.gasPrice, 'gwei')
 			})
@@ -41,7 +41,7 @@ const ToDo = {
 	},
 
 	destroy: function (id) {
-		return this.instance.destroy.call(id, {
+		return this.instance.destroy(id, {
 				from: window.web3.eth.defaultAccount,
 				gas: 50000
 			})
